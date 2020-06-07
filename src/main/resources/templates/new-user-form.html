@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!--/*@thymesVar id="addUser" type="com.example.pre_3_1_2.model.User"*/-->
+<form th:fragment="new-user-fragment" th:object="${addUser}" th:action="@{/admin/add}" method="post"
+      class="form-horizontal text-center mx-auto font-weight-bold"
+      style="width: 350px; padding: 20px">
+    <div class="form-group">
+        <label for="firstName">First name</label>
+        <input type="text" class="form-control" id="firstName"
+               th:field="*{firstName}" th:value="*{firstName}"/>
+    </div>
+    <div class="form-group">
+        <label for="lastName">Last name</label>
+        <input type="text" class="form-control" id="lastName"
+               th:field="*{lastName}" th:value="*{lastName}"/>
+    </div>
+    <div class="form-group">
+        <label for="age">Age</label>
+        <input type="number" class="form-control" id="age"
+               th:field="*{age}" th:value="*{age}"/>
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email"
+               th:field="*{username}" th:value="*{username}"/>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password"
+               th:field="*{password}">
+    </div>
+    <div class="form-group">
+        <label for="roles">Role</label>
+        <select class="form-control" id="roles" th:field="*{roles}" multiple="multiple"
+                style="height: 60px">
+            <!--/*@thymesVar id="allRoles" type="List<com.example.pre_3_1_2.model.Role>"*/-->
+            <option th:each="role : ${allRoles}"
+                    th:text="${role}"
+                    th:value="${role}">RoleName
+            </option>
+        </select>
+    </div>
+    <input class="btn btn-success" type="submit" value="Add new user">
+</form>
+</body>

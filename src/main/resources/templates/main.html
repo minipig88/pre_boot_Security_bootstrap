@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>AdminPanel</title>
+    <link href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+          crossorigin="anonymous">
+</head>
+
+<body class="page">
+
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand font-weight-bold" sec:authentication="name">Current User Name</a>
+    <a class="navbar-brand">with roles:</a>
+    <a class="navbar-brand" th:each="role: ${#authentication.authorities}" th:text="${role.authority}">Current User
+        Roles</a>
+    <a th:href="@{/logout}" class="navbar-text ml-auto">Logout</a>
+</nav>
+
+<div class="row container-fluid" style="padding: unset; margin: unset; height: 100vh">
+    <div class="col-2" style="padding: unset">
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical"
+             style="margin-top: 10px">
+            <a th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}"
+               class="nav-link active"
+               id="v-pills-admin-tab"
+               data-toggle="pill" href="#v-pills-admin"
+               role="tab" aria-controls="v-pills-admin" aria-selected="true">Admin</a>
+            <a th:if="${#authorization.expression('hasAuthority(''USER'')')}"
+               th:class="'nav-link' + ${#authorization.expression('hasAuthority(''ADMIN'')') ? ' ' : ' active'}"
+               id="v-pills-user-tab" data-toggle="pill"
+               href="#v-pills-user"
+               role="tab" aria-controls="v-pills-user" aria-selected="false">User</a>
+        </div>
+    </div>
+
+    <div class="col-10" id="adminPanel" style="padding: unset; background-color: #f5f5f5">
+        <div class="tab-content" id="v-pills-tabContent" style="margin: 20px">
+            <div th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}" class="tab-pane fade show active"
+                 id="v-pills-admin"
+                 role="tabpanel"
+                 aria-labelledby="v-pills-admin-tab">
+                <h1>Admin Panel</h1>
+                <ul class="nav nav-tabs" id="AdminTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+
+                        <a th:class="${showTabNew} ? 'nav-link' :'nav-link active'" id="usersTable-tab" role="tab"
+                           aria-controls="usersTable" aria-selected="true" th:href="@{/admin}">Users table</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a th:class="${showTabNew} ? 'nav-link active' : 'nav-link'" id="newUser-tab" role="tab"
+                           aria-controls="newUser" aria-selected="false" th:href="@{/admin/add}">New User</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="AdminTabsContent">
+
+                    <div th:class="${showTabNew} ? 'tab-pane fade' : 'tab-pane fade show active'" id="usersTable" role="tabpanel"
+                         aria-labelledby="usersTable-tab">
+
+
+                        <div class="card">
+                            <div class="card-header font-weight-bold" style="font-size: 20px">
+                                All users
+                            </div>
+                            <form th:unless="${showTabNew}" th:action="@{/admin}" method="get" style="padding: 20px">
+
+                                <div th:unless="${showTabNew}" th:insert="~{user-table :: user-table-fragment}"></div>
+
+                            </form>
+                        </div>
+                    </div>
+                    <div th:class="${showTabNew} ? 'tab-pane fade show active' : 'tab-pane fade'" id="newUser" role="tabpanel" aria-labelledby="newUser-tab">
+
+                        <div class="card">
+                            <div class="card-header font-weight-bold" style="font-size: 20px">
+                                Add new user
+                            </div>
+
+                            <div th:if="${showTabNew}" th:insert="~{new-user-form :: new-user-fragment}"></div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${showModalEdit}" class="modal fade" id="editUserModal" tabindex="-1"
+                     role="dialog"
+                     aria-labelledby="editUserModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form action="#" th:object="${userById}" th:action="@{/admin/edit}" method="post">
+                                <div class="modal-header">
+                                    <h5 class="modal-title font-weight-bold"
+                                        id="editUserModalLabel">Edit
+                                        user</h5>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                            aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <div class="modal-body" th:insert="~{edit-user-form :: edit-form-fragment}"></div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close
+                                    </button>
+                                    <input type="submit" class="btn btn-primary" value="Edit"/>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${showModalDelete}" class="modal fade" id="deleteUserModal" tabindex="-1"
+                     role="dialog"
+                     aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form action="#" th:object="${userById}" th:action="@{/admin/delete}" method="post">
+                                <div class="modal-header">
+                                    <h5 class="modal-title font-weight-bold"
+                                        id="deleteUserModalLabel">Edit
+                                        user</h5>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                            aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <div class="modal-body" th:insert="~{edit-user-form :: edit-form-fragment}"></div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close
+                                    </button>
+                                    <input type="submit" class="btn btn-danger" value="Delete"/>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${#authorization.expression('hasAuthority(''USER'')')}"
+                 th:class="'tab-pane fade' + ${#authorization.expression('hasAuthority(''ADMIN'')') ? ' ' : ' show active'}"
+                 id="v-pills-user"
+                 role="tabpanel"
+                 aria-labelledby="v-pills-user-tab">
+                <h1>User information-page</h1>
+
+                <div class="card">
+                    <div class="card-header font-weight-bold" style="font-size: 20px">
+                        About user
+                    </div>
+
+                    <div style="margin: 20px" th:insert="~{user-info :: user-info-fragment}"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript"
+        src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script type="text/javascript"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" th:if="${showModalEdit}">
+    $('#editUserModal').modal('show');
+</script>
+<script type="text/javascript" th:if="${showModalDelete}">
+    $('#deleteUserModal').modal('show');
+</script>
+</body>
+</html>

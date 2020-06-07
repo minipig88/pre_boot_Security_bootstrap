@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="edit-form-fragment"  class="form-horizontal text-center mx-auto font-weight-bold"
+     style="width: 250px"
+     role="form">
+
+    <div class="form-group">
+        <label class="control-label"
+               for="idInput">ID</label>
+        <input type="text" class="form-control"
+               id="idInput" readonly
+               th:field="*{id}"
+               th:value="*{id}"
+        />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label"
+               for="firstNameInput">First
+            name</label>
+        <input type="text" class="form-control"
+               id="firstNameInput" th:readonly="${showModalDelete}"
+               th:field="*{firstName}"
+               th:value="*{firstName}"
+        />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label"
+               for="lastNameInput">Last
+            name</label>
+        <input type="text" class="form-control"
+               id="lastNameInput" th:readonly="${showModalDelete}"
+               th:field="*{lastName}"
+               th:value="*{lastName}"
+        />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label"
+               for="ageInput">Age</label>
+        <input type="number" class="form-control"
+               id="ageInput" th:readonly="${showModalDelete}"
+               th:field="*{age}"
+               th:value="*{age}"
+        />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label"
+               for="emailInput">Email</label>
+        <input type="email" class="form-control"
+               id="emailInput" th:readonly="${showModalDelete}"
+               th:field="*{username}"
+               th:value="*{username}"
+        />
+    </div>
+
+    <div th:unless="${showModalDelete}" class="form-group">
+        <label class="control-label"
+               for="passwordInput">Password</label>
+        <input type="password" class="form-control"
+               id="passwordInput" th:readonly="${showModalDelete}"
+               th:field="*{password}"
+        />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label"
+               for="rolesInput">Role</label>
+        <select class="form-control" style="height: 60px"
+                id="rolesInput"
+                multiple="multiple"
+                th:readonly="${showModalDelete}"
+                th:field="*{roles}">
+            <option th:each="role : ${allRoles}"
+                    th:text="${role.roleName}"
+                    th:value="${role}">RoleName
+            </option>
+        </select>
+    </div>
+
+</div>
+</body>
+</html>
