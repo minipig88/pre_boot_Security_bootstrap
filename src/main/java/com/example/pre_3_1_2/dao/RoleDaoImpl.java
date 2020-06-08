@@ -6,8 +6,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Transactional
@@ -38,22 +36,17 @@ public class RoleDaoImpl implements RoleDao {
 
     @Override
     public Role findByName(String name) {
-        Query query = entityManager.createQuery("from Role where roleName = :name");
-        query.setParameter("name", name);
-        return (Role) query.getSingleResult();
+        return entityManager.createQuery("from Role where roleName = :name", Role.class)
+                .setParameter("name", name).getSingleResult();
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public List<Role> findAll() {
-        TypedQuery<Role> query = (TypedQuery<Role>) entityManager.createQuery("from Role");
-        return query.getResultList();
+        return entityManager.createQuery("from Role", Role.class).getResultList();
     }
 
     @Override
     public void deleteById(Long id) {
-        Query query = entityManager.createQuery("delete from Role where id = :id");
-        query.setParameter("id", id);
-        query.executeUpdate();
+        entityManager.createQuery("delete from Role where id = :id").setParameter("id", id).executeUpdate();
     }
 }

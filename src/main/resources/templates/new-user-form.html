@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<!--/*@thymesVar id="addUser" type="com.example.pre_3_1_2.model.User"*/-->
 <form th:fragment="new-user-fragment" th:object="${addUser}" th:action="@{/admin/add}" method="post"
       class="form-horizontal text-center mx-auto font-weight-bold"
       style="width: 350px; padding: 20px">
@@ -35,7 +34,6 @@
         <label for="roles">Role</label>
         <select class="form-control" id="roles" th:field="*{roles}" multiple="multiple"
                 style="height: 60px">
-            <!--/*@thymesVar id="allRoles" type="List<com.example.pre_3_1_2.model.Role>"*/-->
             <option th:each="role : ${allRoles}"
                     th:text="${role}"
                     th:value="${role}">RoleName

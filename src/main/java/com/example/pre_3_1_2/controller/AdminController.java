@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-
 @Controller
 @RequestMapping(value = "/admin")
 public class AdminController {
 
+    //Код стайл. Писать как константу или нет?
     private final UserService userService;
     private final RoleService roleService;
     private List<User> userList;

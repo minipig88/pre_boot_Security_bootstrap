@@ -34,28 +34,10 @@ public class User implements UserDetails {
     private Set<Role> roles;
 
     public User() {
-        this.roles = new HashSet<>();
-    }
-
-    public User(String username, String password, Set<Role> roles) {
-        this.roles = roles;
-        this.username = username;
-        this.password = password;
     }
 
     public User(String username, String password, String firstName, String lastName,
                 int age, Set<Role> roles) {
-        this.username = username;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
-        this.roles = roles;
-    }
-
-
-    public User(Long id, String username, String password, String firstName, String lastName, int age, Set<Role> roles) {
-        this.id = id;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -147,4 +129,21 @@ public class User implements UserDetails {
         return true;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return age == user.age &&
+                Objects.equals(username, user.username) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(firstName, user.firstName) &&
+                Objects.equals(lastName, user.lastName) &&
+                Objects.equals(roles, user.roles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, password, firstName, lastName, age, roles);
+    }
 }

@@ -10,9 +10,7 @@
           crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
-
-<body class="page" id="login-page">
-
+<body class="body" id="login-page">
 <div class="container-fluid" id="login-page-container">
     <div class="mx-auto" style="width: 250px">
         <br>
@@ -22,26 +20,21 @@
             <div th:if="${param.error}">
                 <div class="alert alert-danger">Invalid username or password!!!</div>
             </div>
-
             <div th:if="${param.logout}">
                 <div class="alert alert-info">You have been logged out.</div>
             </div>
-
             <div class="form-group" id="login-form">
                 <input type="email"
                        id="username" name="j_username" class="form-control"
                        autofocus="autofocus" placeholder="Email address"/>
-
                 <input type="password"
                        id="password" name="j_password" class="form-control"
                        placeholder="Password"/>
             </div>
-
             <div class="form-group">
                 <input type="submit" name="login-submit" id="login-submit"
                        class="form-control btn btn-primary" value="Sign in"/>
             </div>
-
         </form>
     </div>
 </div>
