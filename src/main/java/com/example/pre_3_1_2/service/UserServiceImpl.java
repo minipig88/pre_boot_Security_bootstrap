@@ -37,14 +37,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(User user) {
+    public void update(User user, String[] roles) {
         User userUpd = userDao.findById(user.getId());
         if (user.getPassword() != null && !user.getPassword().equals("")) {
             userUpd.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         Set<Role> roleSet = new HashSet<>();
-        for (Role role : user.getRoles()) {
-            roleSet.add(roleDao.findByName(role.getRoleName()));
+        for (String role : roles) {
+            roleSet.add(roleDao.findByName(role));
         }
         userUpd.setRoles(roleSet);
         userUpd.setUsername(user.getUsername());
